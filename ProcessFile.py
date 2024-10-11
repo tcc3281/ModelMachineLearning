@@ -20,12 +20,13 @@ def equal_discrate_bins(data, bins, target=None):
         data[column] = pd.cut(data[column], bins, labels=False)
     return data
 
-def k_fold_cross_validation(data, k):
-    k_folds=[]
+def k_fold_cross_validation(data, k, y_label):
+    k_folds=[[],[]]
     shuffled_df = data.sample(frac=1).reset_index(drop=True)
     fold_size = int(len(data)/k)
     for i in range(k):
         start = i*fold_size
         end = (i+1)*fold_size
-        k_folds.append(shuffled_df[start:end])
+        k_folds[0].append(shuffled_df[start:end].drop(columns=y_label))
+        k_folds[1].append(shuffled_df[start:end][y_label])
     return k_folds
